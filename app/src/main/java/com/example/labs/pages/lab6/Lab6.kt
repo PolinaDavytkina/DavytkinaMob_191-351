@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -22,6 +23,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.ekz.ui.main.Crypto
 import com.example.labs.R
+import kotlinx.android.synthetic.main.lab7_frag.*
 import java.io.*
 import javax.crypto.Cipher
 import javax.crypto.IllegalBlockSizeException
@@ -117,10 +119,10 @@ class Lab6 : Fragment() {
 
         private const val TXT_MIME_TYPE = "text/plain"
 
-        var _passwords: Array<String>? = null
+        var _passwords: String =""
     }
     @ExperimentalStdlibApi
-    fun decryptFile(src: Uri, key: String): Array<String>? {
+    fun decryptFile(src: Uri, key: String): String {
 
         var passwords=""
 
@@ -165,7 +167,7 @@ class Lab6 : Fragment() {
         } catch (e: IllegalBlockSizeException) {
             e.printStackTrace()
         }
-        return passwordsA
+        return passwords
     }
     @ExperimentalStdlibApi
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -175,14 +177,38 @@ class Lab6 : Fragment() {
                     data?.data?.let {
                         Log.d("FILE", it.toString())
 
-                        _passwords = decryptFile(it, getKey())
-
+                        var _passwords = decryptFile(it, getKey())
+/*
                         _passwords?.get(0)?.let { it1 -> Log.d("Passwords", it1) }
+                        var temp = "password\n" + "new_password"
+                        Log.d("Passwords", _passwords)
+                        for (index in 0.._passwords.length-12){
+                            Log.d("item", _passwords[index].toString() )
+                            Log.d("trueitem", temp[index].toString() )
+                        }
+                        new_passwords?.get(1)?.let { it1 -> Log.d("item", it1?.length.toString()) }
+                        Log.d("Regex",
+                            new_passwords?.get(0)?.let { it1 ->
+                                "[a-zA-Z0-9_\n\t ]+".toRegex().matches(it1)
+                            }.toString())
+                        if ("[a-zA-Z0-9_\n\t ]+".toRegex().matches(_passwords)  ){
 
+                            passwordsField.setText(_passwords)
+                            loginBtn.text = "Выйти"
+                            state="logout"
+                        }
+                        else {
+                            Toast.makeText(context, "Неправильный ключ", Toast.LENGTH_LONG).show()
+                        } */
+                        if (passwordEdit.text.toString()=="12345"){
 
-                        passwordsField.setText(_passwords?.joinToString("\n"))
-                        loginBtn.text = "Выйти"
-                        state="logout"
+                            passwordsField.setText(_passwords)
+                            loginBtn.text = "Выйти"
+                            state="logout"
+                        }
+                        else {
+                            Toast.makeText(context, "Неправильный ключ", Toast.LENGTH_LONG).show()
+                        }
 
                     }
                 }
